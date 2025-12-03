@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git url: 'https://github.com/harshitavyas23/food-cart.git', branch: 'main'
+                git url: 'https://github.com/harshitavyas23/food-cart.git', branch: 'master'
             }
         }
 
