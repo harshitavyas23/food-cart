@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = "harshitavyas23/food-cart:latest"
-        APP_SERVER = "18.236.87.81" 
+        APP_SERVER = "172.31.24.178" 
     }
 
     stages {
@@ -21,7 +21,7 @@ pipeline {
 
         stage('Push Docker Image to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-pass', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh """
                         echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
                         docker push ${DOCKER_IMAGE}
@@ -32,7 +32,7 @@ pipeline {
 
         stage('Deploy to App Server') {
             steps {
-                sshagent(['app-server-key']) {
+                sshagent(['food-cart-ssh']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ec2-user@${APP_SERVER} '
                             docker pull ${DOCKER_IMAGE} &&
